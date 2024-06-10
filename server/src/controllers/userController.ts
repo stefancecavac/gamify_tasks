@@ -10,7 +10,7 @@ const registerUser = async (req: Request, res: Response) => {
     const { user_name, email, password } = req.body
 
     if (!validator.isEmail(email)) {
-        return res.status(200).json({ message: 'Not a valid email' })
+        return res.status(200).json({field: 'email' , message: 'Not a valid email' })
     }
 
     if (!validator.isStrongPassword(password, {
@@ -20,7 +20,7 @@ const registerUser = async (req: Request, res: Response) => {
         minNumbers: 1,
         minSymbols: 1
     })) {
-        return res.status(400).json({ message: 'Not a strong password' })
+        return res.status(400).json({field: 'password' , message: 'Not a strong password' })
     }
     try {
         const emailExists = await prisma.users.findUnique({
@@ -28,7 +28,7 @@ const registerUser = async (req: Request, res: Response) => {
         })
 
         if (emailExists) {
-            return res.status(400).json({ message: 'Email already in use' })
+            return res.status(400).json({ field: 'email' , message: 'Email already in use' })
         }
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
@@ -51,7 +51,7 @@ const registerUser = async (req: Request, res: Response) => {
         const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1d' })
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 86400
+            maxAge: 86400000
         })
 
         res.status(201).json(user)
@@ -69,12 +69,12 @@ const loginUser = async (req: Request, res: Response) => {
             where: { email: email }
         })
         if (!user) {
-            return res.status(200).json({ message: 'Wrong email' })
+            return res.status(400).json({ message: 'Wrong email or password' })
         }
 
         const checkPassword = await bcrypt.compare(password, user.password)
         if (!checkPassword) {
-            return res.status(200).json({ message: 'Wrong password' })
+            return res.status(400).json({ message: 'Wrong email or password' })
         }
 
         const jwtSecret = process.env.JWT_SECRET
@@ -86,7 +86,7 @@ const loginUser = async (req: Request, res: Response) => {
         const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1d' })
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 864000
+            maxAge: 86400000
         })
 
         res.status(200).json(user)

@@ -5,15 +5,16 @@ const prisma = new PrismaClient()
 
 const getAllTasks = async(req:Request, res:Response)=>{
     const id = req.user.id
-
     
     try {
         const allTasks = await prisma.tasks.findMany({
-            where:{userId:id}
+            where:{
+                userId:id
+            }
         })
 
         if(allTasks.length === 0){
-            return res.status(404).json({message: 'No tasks found!'})
+            return res.status(200).json(allTasks)
         }
 
         res.status(200).json(allTasks)
