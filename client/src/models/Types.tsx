@@ -3,10 +3,12 @@ import {z} from 'zod'
 
 
 export const taskSchema = z.object({
-    title: z.string(),
-    content: z.string(),
-    
-
+    id: z.number().optional(),
+    title: z.string().min(1 , {message:'Field must not be empty'}).max(20 , {message: 'Max 20 characters'}),
+    content: z.string().min(1 , {message:'Field must not be empty'}).max(100, {message: 'Max 100 characters'}),
+    difficulty: z.enum(['easy', 'medium', 'hard']), 
+    createdAt: z.date().default(() => new Date), 
+    updatedAt: z.date().default(() => new Date)
 })
 
 export const registerSchema = z.object({

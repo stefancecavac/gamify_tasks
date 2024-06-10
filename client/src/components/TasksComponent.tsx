@@ -5,27 +5,34 @@ import TaskCard from "./TaskCard"
 
 
 const TasksComponent = () => {
-    const { loading, error, tasks } = UseFetchTasks()
+    const { loading, tasks } = UseFetchTasks()
 
     if (loading) return <LoadingComponent></LoadingComponent>
 
     return (
-        <div className=" flex flex-col p-5 m-10  relative gap-5 mt-10 ">
-            <div className="flex items-center justify-between ">
-                <h2 className="text-2xl text-gray-600">My Tasks:</h2>
+        <div className=" flex flex-col m-10  relative mt-10 ">
+            <div className="flex items-center justify-between mb-3 ">
+                <div className="flex items-center gap-3">
+                    <h2 className="text-xl text-gray-500">My Tasks:</h2>
+                   {tasks.length > 0 && <p className="text-xl text-white rounded-full px-3 py-1 bg-purple-500">{tasks.length}</p>} 
+                </div>
                 <NewTaskButton></NewTaskButton>
             </div>
 
-            {tasks.length === 0 ?
-                <div>
-                    <p className="flex  items-center justify-center mt-20">No Tasks found</p>
+            <div className="border-2 flex flex-col border-gray-300 p-5 rounded-md gap-5">
+                {tasks.length === 0 ?
+                    <div>
+                        <p className="flex items-center justify-center text-gray-400">Empty</p>
+                    </div>
+                    :
+                    tasks && tasks.map((task) => (
+                        <TaskCard key={task.id} task={task}></TaskCard>
+                    ))}
+                <div className="flex justify-center mt-5">
+                    <p className="text-gray-400">Your tasks go here</p>
                 </div>
-                :
-                tasks && tasks.map((task) => (
-                    <TaskCard key={task.id} task={task}></TaskCard>
-                ))}
 
-
+            </div>
 
         </div>
     )

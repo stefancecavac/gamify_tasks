@@ -21,12 +21,19 @@ model users {
   tasks     tasks[]
 }
 
+enum taskDifficulty{
+    easy
+    medium
+    hard
+}
+
 model tasks {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String
+  difficulty taskDifficulty 
   user      users?     @relation(fields: [userId], references: [id])
   userId    Int?
 }

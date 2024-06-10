@@ -14,7 +14,7 @@ const getAllTasks = async(req:Request, res:Response)=>{
         })
 
         if(allTasks.length === 0){
-            return res.status(200).json(allTasks)
+        return res.status(200).json(allTasks)
         }
 
         res.status(200).json(allTasks)
@@ -45,7 +45,7 @@ const getSingleTask = async(req:Request, res:Response)=>{
 }
 
 const createTask = async (req:Request , res:Response) => {
-    const {title , content} = req.body
+    const {title , content ,difficulty} = req.body
     const id = req.user.id
 
     try {
@@ -53,7 +53,8 @@ const createTask = async (req:Request , res:Response) => {
             data:{
                 title:title,
                 content:content,
-                userId:id
+                userId:id,
+                difficulty:difficulty
             }
          })   
 
@@ -79,7 +80,7 @@ const deleteTask = async (req:Request , res:Response) => {
             return res.status(404).json({message: 'No task with that id'})
         }
 
-        res.status(200).json(deleted)
+        res.status(200).json({message: 'Task deleted successfully', task: deleted})
     } catch (error) {
         console.log(`Something went wrong deleting tasks` , error)
         res.status(500).json({message: `Something went wrong`}) 

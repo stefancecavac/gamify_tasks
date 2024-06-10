@@ -66,3 +66,22 @@
       animation: animModalOpacity 0.4s linear normal;
     }
   }
+
+  @keyframes animateDelete {
+    0% {
+      transform: translateX(0);
+      opacity: 100
+    }
+    
+    100% {
+      animation-timing-function: ease-out;
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  @layer utilities {
+    .animate-delete {
+      animation: animateDelete 0.2s linear normal;
+    }
+  }
