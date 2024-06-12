@@ -1,9 +1,10 @@
-import { UseUserContext } from "../hooks/UseUserContext"
+import { useSelector } from "react-redux"
 import LogoutButton from "./LogoutButton"
+import { RootState } from "../redux/store"
 
 
 const Header = () => {
-    const { user } = UseUserContext()
+    const user = useSelector((state:RootState) => state.auth.user)
 
     return (
         <div className="flex justify-between items-center p-5 shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">

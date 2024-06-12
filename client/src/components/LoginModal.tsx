@@ -9,10 +9,10 @@ interface LoginModalProps {
 }
 const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) => {
     const { register, handleSubmit, formState: { errors } , setError} = useForm<loginData>({ resolver: zodResolver(loginSchema)})
-    const {login} = UseLoginHook()
+    const {loginUser} = UseLoginHook()
 
     const onSubmit = (data:loginData) => {
-        login(data , setError)
+        loginUser(data , setError)
     }
 
     return (

@@ -1,12 +1,12 @@
+import { useDispatch } from "react-redux"
 import { loginData } from "../models/Types"
-import { UseUserContext } from "./UseUserContext"
+import { login } from "../redux/authSlice"
 
 
 const UseLoginHook = () => {
-    const {dispatch} = UseUserContext()
-
+    const dispatch = useDispatch()
   
-    const login = async(data:loginData ,setError) => {
+    const loginUser = async(data:loginData ,setError) => {
         const response = await fetch(`http://localhost:3000/api/users/login`,{
             method: 'POST',
             body:JSON.stringify(data),
@@ -22,12 +22,12 @@ const UseLoginHook = () => {
         }
 
         if(response.ok){
-            dispatch({type:'LOGIN' , payload:json})
+            dispatch(login(json))
             localStorage.setItem('user' , JSON.stringify(json))
         }
     }
 
-    return {login}
+    return {loginUser}
 }
 
 export default UseLoginHook

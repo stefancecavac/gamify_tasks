@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
-import { UseStateContext } from "./UseStateContext"
+import { useDispatch, useSelector } from "react-redux"
+import { setTasks } from "../redux/taskSlice"
+import { RootState } from "../redux/store"
 
 
 const UseFetchTasks = () => {
     const [loading , setLoading] = useState(true)
     const [error , setError] = useState(false)
-    const {tasks, dispatch} = UseStateContext()
-
+    const tasks = useSelector((state: RootState) => state.tasks.tasks)
+    const dispatch = useDispatch()
     
     useEffect(() => {
         const fetchTastks = async() => {
@@ -16,7 +18,7 @@ const UseFetchTasks = () => {
             const json = await response.json()
 
             if(response.ok){
-                dispatch({type:'SET_TASKS' , payload:json})
+                dispatch(setTasks(json))
                 setError(false)
                 setLoading(false)
             }

@@ -1,10 +1,12 @@
-import { UseStateContext } from "./UseStateContext"
-import { UseUserContext } from "./UseUserContext"
+import { useDispatch, useSelector } from "react-redux"
+import { deleteTasks } from "../redux/taskSlice"
+import { RootState } from "../redux/store"
 
 
 const UseDeleteTask = () => {
-    const {tasks, dispatch } = UseStateContext()
-    const {dispatch:userDispatch} = UseUserContext()
+    const tasks = useSelector((state:RootState) => state.tasks.tasks)
+    const dispatch = useDispatch()
+    
 
     const deleteTask = async (id: number) => {
         try {
@@ -23,8 +25,8 @@ const UseDeleteTask = () => {
                     }
                  const xp = xpMap[deletedTask.difficulty] || 0
                  
-                dispatch({ type: 'DELETE_TASK', payload: id })
-                userDispatch({ type: 'REMOVE_XP' , payload:xp })
+                 dispatch(deleteTasks(id))
+                    
             }
         }
         } catch (error) {

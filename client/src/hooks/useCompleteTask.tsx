@@ -1,12 +1,13 @@
-import { UseStateContext } from "./UseStateContext"
-import { UseUserContext } from "./UseUserContext"
+import { useDispatch} from "react-redux"
+
+import { deleteTasks } from "../redux/taskSlice"
+import { addXp } from "../redux/authSlice"
 
 
 
 
 const UseCompleteTask = () => {
-    const { tasks, dispatch } = UseStateContext()
-    const { dispatch:userDispatch} = UseUserContext()
+    const dispatch = useDispatch()
 
     const completeTask = async (id: number) => {
         try {
@@ -14,23 +15,12 @@ const UseCompleteTask = () => {
                 method: 'DELETE',
                 credentials: 'include'
             })
+            const json = await response.json()
 
             if (response.ok) {
-                    const deletedTask = tasks.find(task => task.id === id);
-
-                    if (deletedTask) {
-                        const xpMap: { [key: string]: number } = {
-                            'easy': 10,
-                            'medium': 20,
-                            'hard': 30
-                        }
-    
-                        const xp = xpMap[deletedTask.difficulty] || 0
-                    
-                    dispatch({ type: 'DELETE_TASK', payload: id })
-                    userDispatch({type: 'ADD_XP' , payload: xp})
-                }
-            }
+                    dispatch(deleteTasks(id))
+                    dispatch(addXp(json))
+                }     
         } catch (error) {
             console.log(error)
         }

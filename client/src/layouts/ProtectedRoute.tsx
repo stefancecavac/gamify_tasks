@@ -1,22 +1,26 @@
 
 import { useNavigate } from "react-router-dom"
 import { ReactNode, useEffect } from "react"
-import { UseUserContext } from "../hooks/UseUserContext"
+import { useSelector } from "react-redux"
+import { RootState } from "../redux/store"
 
 
 
-const ProtectedRoute = ({children}:{children: ReactNode }) => {
-  const {user} = UseUserContext()
-    const navigate = useNavigate()
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const user = useSelector((state: RootState) => state.auth.user)
+  const navigate = useNavigate()
 
-   useEffect(() => {
-    if(!user){
-    navigate('/signup' , {replace: true})
-    }
-   } , [user , navigate])
+  useEffect(() => {
+    if (user === null) {
+      navigate('/signup', { replace: true })
+      }
 
-   return children
-    
+  } , [navigate , user])
+
+  return children
+
+
+
 }
 
 export default ProtectedRoute

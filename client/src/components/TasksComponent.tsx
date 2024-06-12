@@ -25,7 +25,7 @@ const TasksComponent = () => {
                         <p className="flex items-center justify-center text-gray-400">Empty</p>
                     </div>
                     :
-                    tasks && tasks.map((task) => (
+                 tasks && tasks.map((task) => (
                         <TaskCard key={task.id} task={task}></TaskCard>
                     ))}
                 <div className="flex justify-center mt-5">

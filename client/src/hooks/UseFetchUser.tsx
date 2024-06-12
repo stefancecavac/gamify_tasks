@@ -1,13 +1,17 @@
 import { useEffect } from "react"
-import { UseUserContext } from "./UseUserContext"
+import { useDispatch } from "react-redux"
+import { login } from "../redux/authSlice"
 
 
 
 const UseFetchUser = (id:number) => {
-    const { dispatch } = UseUserContext()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const fetchUser = async (id: number) => {
+            if(!id){
+                return console.log('no id')
+            }
             try {
                 const response = await fetch(`http://localhost:3000/api/users/${id}`, {
                     credentials: 'include'
@@ -15,7 +19,7 @@ const UseFetchUser = (id:number) => {
                 const json = await response.json()
 
                 if (response.ok) {
-                    dispatch({ type: 'SET_USER', payload: json })
+                    dispatch(login(json))
                 }
             } catch (error) {
                 console.log(error)

@@ -5,20 +5,20 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import MainLayout from './layouts/MainLayout'
 import Signup from './pages/Signup'
-import { UserContextProvider } from './context/UserContext'
 import AuthRedirect from './layouts/AuthRedirect'
 import ProtectedRoute from './layouts/ProtectedRoute'
-import { StateContextProvider } from './context/MainStateContext'
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element:<MainLayout></MainLayout>,
+    element: <MainLayout></MainLayout>,
     children: [
       {
         path: '/',
-        element:<ProtectedRoute><Home></Home></ProtectedRoute>
+        element: <ProtectedRoute><Home></Home></ProtectedRoute>
       }
     ]
   },
@@ -32,10 +32,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <UserContextProvider>
-      <StateContextProvider>
-      <RouterProvider router={router}></RouterProvider>
-      </StateContextProvider>
-    </UserContextProvider>
+      <Provider store={store}>
+
+        <RouterProvider router={router}></RouterProvider>
+      </Provider>
   </React.StrictMode>,
 )

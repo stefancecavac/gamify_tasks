@@ -1,14 +1,18 @@
+import { useSelector } from "react-redux"
 import TasksComponent from "../components/TasksComponent"
 import UseFetchUser from "../hooks/UseFetchUser"
-import { UseUserContext } from "../hooks/UseUserContext"
+import { RootState } from "../redux/store"
 
 const Home = () => {
-    const {user} = UseUserContext()
-    if(!user){
-        return <p>no user</p>
-    }
-    UseFetchUser(user.id)
+    const user = useSelector((state: RootState) => state.auth.user)
+    
+   
 
+    if(user){
+
+        UseFetchUser(user.id)
+    }
+   
 
 
     return (

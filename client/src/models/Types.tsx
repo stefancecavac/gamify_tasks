@@ -20,6 +20,7 @@ export const registerSchema = z.object({
 })
 
 export const loginSchema = z.object({
+    id: z.number().optional(),
     email: z.string().min(1 ,{ message: 'Email is required' }),
     password: z.string().min(1, { message: 'Password is required' }),
     experience_points: z.number().default(0),

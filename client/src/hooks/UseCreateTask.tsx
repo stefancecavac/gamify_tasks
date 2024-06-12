@@ -1,10 +1,11 @@
+import { useDispatch } from "react-redux"
 import { taskData } from "../models/Types"
-import { UseStateContext } from "./UseStateContext"
+import { createTasks } from "../redux/taskSlice"
 
 
 const UseCreateTask = () => {
 
-    const { dispatch } = UseStateContext()
+   const dispatch = useDispatch()
 
     const createTask = async (data: taskData , setNewTaskModal) => {
         const response = await fetch(`http://localhost:3000/api/tasks/`, {
@@ -16,7 +17,7 @@ const UseCreateTask = () => {
         const json = await response.json()
 
         if (response.ok) {
-            dispatch({ type: 'ADD_TASK', payload: json })
+            dispatch(createTasks(json))
             setNewTaskModal(false)
         }
     }

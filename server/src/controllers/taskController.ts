@@ -146,7 +146,7 @@ const completeTask = async (req: Request, res: Response) => {
             }
         });
 
-        res.status(200).json({ message: 'Task completed successfully', task: completedTask, xpEarned })
+        res.status(200).json( xpEarned )
 
     } catch (error) {
         console.error('Something went wrong completing tasks', error)

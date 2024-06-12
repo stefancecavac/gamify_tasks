@@ -1,12 +1,7 @@
 
-
-
 const Footer = () => {
 
-
     return (
-
-
         <footer className="bg-gray-200 border-t-2 bottom-0  right-0 left-0 border-gray-300">
 
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
@@ -52,7 +47,6 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
-
     )
 }
 

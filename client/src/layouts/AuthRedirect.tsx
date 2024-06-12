@@ -1,25 +1,24 @@
 
 import { useNavigate } from "react-router-dom"
-import { ReactNode, useEffect, useState } from "react"
-import { UseUserContext } from "../hooks/UseUserContext"
+import { ReactNode, useEffect } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../redux/store"
 
 
 
-const AuthRedirect = ({children}:{children: ReactNode }) => {
-  const {user} = UseUserContext()
-  const [isLoading, setIsLoading] = useState(true);
+const AuthRedirect = ({ children }: { children: ReactNode }) => {
+  const user = useSelector((state: RootState) => state.auth.user)
   const navigate = useNavigate()
 
-   useEffect(() => {
-    if(user){
-      navigate('/' , {replace: true})
-    }else{
-      setIsLoading(false);
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true })
     }
-   } , [user , navigate])
 
-   return isLoading ? null : children
-    
+  } , [navigate , user])
+
+  return children
+
 }
 
 export default AuthRedirect

@@ -1,10 +1,11 @@
+import { useDispatch } from "react-redux"
 import { registerData } from "../models/Types"
-import { UseUserContext } from "./UseUserContext"
+import { login } from "../redux/authSlice"
 
 
 
 const UseRegisterHook = () => {
-    const { dispatch } = UseUserContext()
+    const dispatch = useDispatch()
 
 
     const handleRegister = async (data: registerData , setError) => {
@@ -21,7 +22,7 @@ const UseRegisterHook = () => {
             setError(json.field, { type: 'manual', message: json.message });
         }
         if (response.ok) {
-            dispatch({ type: 'LOGIN', payload: json })
+            dispatch(login(json))
             localStorage.setItem('user', JSON.stringify(json))
         }
     }
