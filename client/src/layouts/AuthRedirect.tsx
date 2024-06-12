@@ -1,21 +1,24 @@
 
 import { useNavigate } from "react-router-dom"
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { UseUserContext } from "../hooks/UseUserContext"
 
 
 
 const AuthRedirect = ({children}:{children: ReactNode }) => {
   const {user} = UseUserContext()
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
 
    useEffect(() => {
     if(user){
       navigate('/' , {replace: true})
+    }else{
+      setIsLoading(false);
     }
    } , [user , navigate])
 
-   return children 
+   return isLoading ? null : children
     
 }
 

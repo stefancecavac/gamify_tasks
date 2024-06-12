@@ -2,6 +2,7 @@ import { useState } from "react"
 import UseDeleteTask from "../hooks/UseDeleteTask"
 import { taskData } from "../models/Types"
 import { formatDistanceToNow } from "date-fns"
+import UseCompleteTask from "../hooks/useCompleteTask";
 
 
 const difficultyColors = {
@@ -12,7 +13,10 @@ const difficultyColors = {
 
 const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
     const { deleteTask } = UseDeleteTask()
+    const {completeTask} = UseCompleteTask()
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isCompleting, setIsCompleting] = useState(false)
+
 
     const handleDelete = async (id: number) => {
         setIsDeleting(true)
@@ -23,9 +27,18 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
         }, 100)
     }
 
+    const handleComplete = async (id: number) => {
+        setIsCompleting(true)
+        
+        setTimeout(async () => {
+                await completeTask(id)
+                setIsCompleting(false)
+        }, 100)
+    }
+
     return (
-        <div className={`rounded-xl flex shadow-md overflow-hidden bg-white transition-all hover:scale-105 ${isDeleting ? 'animate-delete' : ''}`}>
-            <div className="hover:bg-green-400 transition-all p-2 flex  items-center hover:cursor-pointer">
+        <div className={`rounded-xl flex shadow-md overflow-hidden bg-white transition-all hover:scale-105 ${isCompleting ? 'animate-complete' : ''} ${isDeleting ? 'animate-delete' : ''}`}>
+            <div onClick={() => handleComplete(task.id)} className="hover:bg-green-400 transition-all p-2 flex  items-center hover:cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  text-gray-300 ">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>

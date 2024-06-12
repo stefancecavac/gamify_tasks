@@ -29,11 +29,11 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
                     <input className="mt-1 p-2 rounded-2xl text-gray-500 bg-gray-200" {...register('title')}></input>
                     {errors.title?.message && <span className="text-red-500 font-normal">{errors.title.message}</span>}
                 </label>
-                
+
                 <label className="flex w-full px-10 mt-5 font-bold flex-col text-white ">Select Difficulty:
                     <select className="mt-1 p-2 rounded-2xl text-gray-500 bg-gray-200" {...register('difficulty')}>
                         <option disabled value="">Select Difficulty</option>
-                        {taskSchema.shape.difficulty._def.values.map(difficulty => (
+                        {taskSchema.shape.difficulty.options.map(difficulty => (
                             <option key={difficulty} value={difficulty}>{difficulty}</option>
                         ))}
                     </select>

@@ -2,7 +2,7 @@ import express from 'express'
 
 const router = express.Router()
 
-import {getAllTasks , createTask , getSingleTask ,deleteTask} from '../controllers/taskController'
+import {getAllTasks , createTask , getSingleTask ,deleteTask , completeTask} from '../controllers/taskController'
 import authenticate from '../middleware/authentication'
 
 
@@ -11,6 +11,8 @@ router.get('/' , getAllTasks)
 router.get('/:id' , getSingleTask)
 router.post('/' , createTask)
 router.delete('/:id' , deleteTask)
+router.delete('/:id/complete' , completeTask)
+
 
 
 

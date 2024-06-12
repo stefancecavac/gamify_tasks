@@ -18,6 +18,7 @@ model users {
   user_name String  @db.VarChar(50)
   email     String  @unique @db.VarChar(100)
   password  String  @db.VarChar(255)
+  experience_points Int @default(0)
   tasks     tasks[]
 }
 
