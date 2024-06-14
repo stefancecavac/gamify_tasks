@@ -1,8 +1,9 @@
-import { useState } from "react"
-import UseDeleteTask from "../hooks/UseDeleteTask"
+
 import { taskData } from "../models/Types"
 import { formatDistanceToNow } from "date-fns"
-import UseCompleteTask from "../hooks/useCompleteTask";
+import useDeleteTask from "../api/deleteTask";
+import useCompleteTask from "../api/completeTask";
+import LoadingComponent from "./LoadingComponent";
 
 
 const difficultyColors = {
@@ -12,37 +13,34 @@ const difficultyColors = {
 };
 
 const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
-    const { deleteTask } = UseDeleteTask()
-    const {completeTask} = UseCompleteTask()
-    const [isDeleting, setIsDeleting] = useState(false)
-    const [isCompleting, setIsCompleting] = useState(false)
+    const { deleteTask, loading: deleteLoading, deleteAnimation } = useDeleteTask()
+    const { complete, loading: completeLoading } = useCompleteTask()
+
 
 
     const handleDelete = async (id: number) => {
-        setIsDeleting(true)
-        
-        setTimeout(async () => {
-                await deleteTask(id)
-                setIsDeleting(false)
-        }, 100)
+        deleteTask(id);
+
     }
 
     const handleComplete = async (id: number) => {
-        setIsCompleting(true)
-        
-        setTimeout(async () => {
-                await completeTask(id)
-                setIsCompleting(false)
-        }, 100)
+      complete((id))
+      
     }
 
+
     return (
-        <div className={`rounded-xl flex shadow-md overflow-hidden bg-white transition-all hover:scale-105 ${isCompleting ? 'animate-complete' : ''} ${isDeleting ? 'animate-delete' : ''}`}>
-            <div onClick={() => handleComplete(task.id)} className="hover:bg-green-400 transition-all p-2 flex  items-center hover:cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  text-gray-300 ">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
+        <div className={`rounded-xl transition-all  ease-in-out flex  shadow-md overflow-hidden bg-white ${deleteAnimation ? 'animate-delete ' : 'animate-task  '} `}>
+
+            <div onClick={() => handleComplete(task.id!)} className={`hover:bg-green-400 transition-all p-2 flex  items-center hover:cursor-pointer`}>
+                {completeLoading ?
+                    <LoadingComponent></LoadingComponent>
+                    :
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  text-gray-300 ">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>}
             </div>
+
 
             <div className="p-2 flex-1 flex-col overflow-hidden">
                 <div className="flex justify-between items-center mb-3">
@@ -54,10 +52,14 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
 
             </div>
 
-            <div onClick={() => handleDelete(task.id)} className="flex p-2 hover:bg-red-500 transition-all items-center hover:cursor-pointer ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  text-gray-300">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
+            <div onClick={() => handleDelete(task.id!)} className="flex p-2 hover:bg-red-500 transition-all items-center hover:cursor-pointer ">
+                {deleteLoading ?
+                    <LoadingComponent></LoadingComponent>
+                    :
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  text-gray-300">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>}
+
             </div>
 
         </div>

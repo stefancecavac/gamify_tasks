@@ -1,18 +1,21 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import {loginData, loginSchema } from "../models/Types";
-import UseLoginHook from "../hooks/UseLoginHook";
+import { userData, userSchema } from "../models/Types";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../redux/authSlice";
+import { AppDispatch, RootState } from "../redux/store";
 
 interface LoginModalProps {
     loginModal: boolean;
     setLoginModal: (value: boolean) => void;
 }
 const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) => {
-    const { register, handleSubmit, formState: { errors } , setError} = useForm<loginData>({ resolver: zodResolver(loginSchema)})
-    const {loginUser} = UseLoginHook()
+    const { register, handleSubmit, formState: { errors } } = useForm<userData>({ resolver: zodResolver(userSchema) })
+    const dispatch = useDispatch<AppDispatch>()
+    const error = useSelector((state: RootState) => state.auth.error)
 
-    const onSubmit = (data:loginData) => {
-        loginUser(data , setError)
+    const onSubmit = (data: userData) => {
+        dispatch(loginUser(data))
     }
 
     return (
@@ -24,21 +27,27 @@ const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) =>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                 </div>
-            
+
                 <label className="flex w-3/5 font-bold flex-col bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent ">Email:
                     <input {...register('email')} className="mt-2 p-2 rounded-2xl text-gray-500 bg-gray-200" placeholder="Ex. hero@gmail.com">
                     </input>
                     {errors.email?.message && <span className="text-red-500 text-sm font-normal">{errors.email?.message}</span>}
+                    {error && <div>{error}</div>}
+               
                 </label>
 
                 <label className="flex w-3/5 font-bold flex-col bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent ">Password:
                     <input {...register('password')} className="mt-2 p-2 rounded-2xl text-gray-500 bg-gray-200" >
                     </input>
                     {errors.password?.message && <span className="text-red-500 text-sm font-normal">{errors.password?.message}</span>}
+                    {error && <div>{error}</div>}
+                
                 </label>
 
                 <button type="submit" className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-2 text-xl text-white mt-5 transition-colors hover:bg-gradient-to-l ">Login</button>
+
             </form>
+
         </div>
     )
 }

@@ -1,7 +1,5 @@
-
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import {PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { taskData } from '../models/Types';
-
 
 
 interface TaskState {
@@ -9,28 +7,30 @@ interface TaskState {
 }
 
 const initialState: TaskState = {
-  tasks: []
+  tasks: [],
 };
-
 
 export const taskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    setTasks: (state , action:PayloadAction<taskData[]>) => {
-        state.tasks = action.payload
+    setTasks: (state, action) => {
+      state.tasks = action.payload
     },
-    createTasks: (state ,action:PayloadAction<taskData>) => {
-       state.tasks.push(action.payload)
+    newTask: (state, action) => {
+      state.tasks.push(action.payload);
     },
-    deleteTasks: (state ,action:PayloadAction<number>) => {
+    failTask:(state, action:PayloadAction<number>) => {
       state.tasks = state.tasks.filter(task => task.id !== action.payload);
     },
-    
+    completeTask:(state, action) => {
+      state.tasks = state.tasks.filter(task => task.id !== action.payload);
+    },
+  
+  },
+  
+});
 
-  }
-})
 
-export const { setTasks, createTasks, deleteTasks } = taskSlice.actions
-
-export default taskSlice.reducer
+export const { setTasks, newTask ,completeTask,failTask } = taskSlice.actions
+export default taskSlice.reducer;

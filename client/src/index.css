@@ -82,7 +82,7 @@
 
 @layer utilities {
   .animate-delete {
-    animation: animateDelete 0.2s linear normal;
+    animation: animateDelete 0.3s linear normal;
   }
 }
 
@@ -101,6 +101,26 @@
 
 @layer utilities {
   .animate-complete {
-    animation: animateComplete 0.2s linear normal;
+    animation: animateComplete 0.3s linear normal;
   }
 }
+
+@keyframes animateTask {
+  0% {
+    transform: scale(0);
+    opacity: 100
+  }
+
+  100% {
+    animation-timing-function: ease-out;
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .animate-task {
+    animation: animateTask 0.2s linear normal;
+  }
+}
+

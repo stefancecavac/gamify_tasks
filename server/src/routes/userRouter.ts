@@ -9,5 +9,5 @@ router.post('/login', loginUser)
 router.post('/logout', logoutUser)
 
 router.use(authenticate)
-router.get('/:id', getUser )
+router.get('/', getUser )
 export default router

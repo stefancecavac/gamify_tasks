@@ -13,13 +13,11 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (user === null) {
       navigate('/signup', { replace: true })
-      }
+    }
 
-  } , [navigate , user])
+  }, [navigate, user])
 
-  return children
-
-
+  return user ? children : null;
 
 }
 

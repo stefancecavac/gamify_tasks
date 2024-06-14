@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { registerData, registerSchema } from "../models/Types";
-import UseRegisterHook from "../hooks/useRegisterHook";
+import { userData, userSchema } from "../models/Types";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../redux/authSlice";
+import { AppDispatch, RootState } from "../redux/store";
 
 interface RegisterModalProps {
     registerModal: boolean;
@@ -9,13 +11,14 @@ interface RegisterModalProps {
 }
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ registerModal, setRegisterModal }) => {
-    const { register, handleSubmit, formState: { errors } , setError } = useForm<registerData>({ resolver: zodResolver(registerSchema)})
-    const {handleRegister} = UseRegisterHook()
+    const { register, handleSubmit, formState: { errors } } = useForm<userData>({ resolver: zodResolver(userSchema) })
+    const dispatch = useDispatch<AppDispatch>()
+    const error = useSelector((state:RootState) => state.auth.error)
 
-    const onSubmit = (data:registerData) => {
-        handleRegister(data , setError)
+    const onSubmit = (data: userData) => {
+        dispatch(registerUser(data))
     }
-   
+
 
     return (
         <div className={`absolute h-fit top-0 right-0 left-0 w-full bg-white p-5 rounded-2xl ${registerModal ? 'block animate-modal' : 'hidden'}`}>
@@ -45,6 +48,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ registerModal, setRegiste
                 </label>
 
                 <button type="submit" className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-2 text-xl text-white mt-5 transition-colors hover:bg-gradient-to-l ">Register</button>
+            {error && <div>{error}</div>}
             </form>
         </div>
     )

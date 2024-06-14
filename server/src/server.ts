@@ -10,6 +10,7 @@ const corsOptions = {
     credentials: true,
 }
 
+
 app.use(cookieparser())
 app.use(cors(corsOptions))
 app.use(express.json())

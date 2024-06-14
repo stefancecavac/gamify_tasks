@@ -1,22 +1,20 @@
-import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import TasksComponent from "../components/TasksComponent"
-import UseFetchUser from "../hooks/UseFetchUser"
-import { RootState } from "../redux/store"
+import { fetchUser } from "../redux/authSlice"
+import { useEffect } from "react"
+import { AppDispatch } from "../redux/store"
 
 const Home = () => {
-    const user = useSelector((state: RootState) => state.auth.user)
-    
-   
+    const disptch = useDispatch<AppDispatch>()
 
-    if(user){
+    useEffect(() => {
 
-        UseFetchUser(user.id)
-    }
-   
+        disptch(fetchUser())
+    })
 
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen w-screen bg-gray-200 ">
+        <div className="transition-all ease-in-out grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen w-screen bg-gray-200 ">
             <p>Feature goes here</p>
             <TasksComponent />
             <p>Feature goes here</p>

@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { taskData, taskSchema } from "../models/Types";
-import UseCreateTask from "../hooks/UseCreateTask";
+import useCreateTask from "../api/createTask";
+
 
 
 interface TaskModalProps {
@@ -12,10 +13,12 @@ interface TaskModalProps {
 
 const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<taskData>({ resolver: zodResolver(taskSchema) })
-    const { createTask } = UseCreateTask()
+    
+    const {createTask,error,loading} = useCreateTask()
 
-    const handleCreate = (data: taskData) => {
-        createTask(data, setNewTaskModal)
+    const handleCreate = async(data: taskData) => {
+        createTask(data)
+
     }
 
 
@@ -44,9 +47,10 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
                         {errors.content?.message && <span className="text-red-500 font-normal">{errors.content.message}</span>}
                     </label>
                     <div className="flex justify-center">
-                        <button type="submit" className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-2 text-xl text-white mt-5 m-5 transition-colors hover:bg-gradient-to-l ">Create Task</button>
+                        <button disabled={loading}   type="submit" className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-2 text-xl text-white mt-5 m-5 transition-colors hover:bg-gradient-to-l ">{loading? 'Creating ...': 'Creat task'}</button>
                     </div>
                 </div>
+                {error && <div>{error}</div>}
             </form>
         </div>
     )

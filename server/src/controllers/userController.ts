@@ -7,18 +7,17 @@ import jwt from 'jsonwebtoken'
 const prisma = new PrismaClient()
 
 const getUser = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id)
+    const id = req.user.id
 
     try {
-
         const user = await prisma.users.findUnique({
             where: {
                 id: id
             }
         })
 
-        if(!user){
-        return res.status(200).json({ field: 'user', message: 'No user found' })
+        if (!user) {
+            return res.status(200).json({ field: 'user', message: 'No user found' })
         }
 
         res.status(200).json({
@@ -102,12 +101,12 @@ const loginUser = async (req: Request, res: Response) => {
             where: { email: email }
         })
         if (!user) {
-            return res.status(400).json({ message: 'Wrong email or password' })
+            return res.status(400).json({field: 'email' , message: 'Wrong email or password' })
         }
 
         const checkPassword = await bcrypt.compare(password, user.password)
         if (!checkPassword) {
-            return res.status(400).json({ message: 'Wrong email or password' })
+            return res.status(400).json({field: 'email', message: 'Wrong email or password' })
         }
 
         const jwtSecret = process.env.JWT_SECRET

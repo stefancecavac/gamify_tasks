@@ -108,7 +108,7 @@ const deleteTask = async (req: Request, res: Response) => {
             })
         ]);
 
-        res.status(200).json({ message: 'Task deleted successfully', xpEarned })
+        res.status(200).json( xpEarned )
 
     } catch (error) {
         console.error('Something went wrong deleting tasks', error)
