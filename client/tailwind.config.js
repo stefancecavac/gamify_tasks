@@ -9,6 +9,12 @@ export default {
     extend: {
       fontFamily:{
         sans:["Montserrat", "sans-serif"]
+      },
+      colors:{
+        'text-primary': '#404040',
+        'text-secundary': '#d1d5db',
+        'primary': '#fbbf24',
+        
       }
     },
   },

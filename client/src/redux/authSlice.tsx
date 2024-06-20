@@ -4,13 +4,15 @@ import {  userData } from "../models/Types";
 interface userState {
     user: userData | null,
     error: string | null,
-    loading:boolean 
+    loading:boolean ,
+    currencyEarned:number
 }
 
 const initialState: userState = {
     user: JSON.parse(localStorage.getItem('user')!)  ,
     error:null,
-    loading:false
+    loading:false,
+    currencyEarned: 0
 };
 
 export const fetchUser = createAsyncThunk(
@@ -110,12 +112,15 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        addXp: (state, action: PayloadAction<number>) => {
-            state.user!.experience_points += action.payload
+        addCurrency: (state, action: PayloadAction<number>) => {
+            state.user!.currency += action.payload
+            state.currencyEarned = 0
+            state.currencyEarned += action.payload
         },
-        removeXp: (state, action: PayloadAction<number>) => {
-            state.user!.experience_points -= action.payload
-        }
+        removeCurrency: (state, action: PayloadAction<number>) => {
+            state.user!.currency -= action.payload
+        }, 
+       
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUser.pending, (state) => {
@@ -155,6 +160,6 @@ const authSlice = createSlice({
     },
 })
 
-export const { addXp,removeXp } = authSlice.actions
+export const { addCurrency,removeCurrency } = authSlice.actions
 
 export default authSlice.reducer

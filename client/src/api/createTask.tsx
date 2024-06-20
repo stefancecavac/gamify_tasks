@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useDispatch} from "react-redux";
 import { newTask} from "../redux/taskSlice";
-import { taskData } from "../models/Types";
+import {  taskData } from "../models/Types";
 
 
 const useCreateTask = () => {
 
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
-    const [error, seterror] = useState(null)
+    const [error, setError] = useState(null)
 
         const createTask = async (data:taskData) => {
             setLoading(true)
@@ -22,12 +22,12 @@ const useCreateTask = () => {
                 const json = await response.json();
 
                 if (!response.ok) {
-                    seterror(json)
+                    setError(json)
                     setLoading(false)
                 }
 
                 if (response.ok) {
-                    seterror(null)
+                    setError(null)
                     setLoading(false)
                     dispatch(newTask(json))
                 }

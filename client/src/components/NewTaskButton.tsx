@@ -1,5 +1,6 @@
 import { useState } from "react"
 import NewTaskModal from "./NewTaskModal"
+import { motion } from "framer-motion"
 
 
 const NewTaskButton = () => {
@@ -7,11 +8,12 @@ const NewTaskButton = () => {
 
     return (
         <>
-            <button onClick={() => setNewTaskModal(prev => !prev)} className=" border-2 border-pink-500  text-pink-500 rounded-full p-1 hover:bg-pink-500 hover:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </button>
+            <motion.button 
+                whileHover={{ scale: 1.2}}
+                onClick={() => setNewTaskModal(prev => !prev)}
+                className="rounded-full p-1 bg-blue-300 text-text-primary font-semibold px-2 py-1 ">
+                New Task
+            </motion.button>
             <NewTaskModal newTaskModal={newTaskModal} setNewTaskModal={setNewTaskModal}></NewTaskModal>
         </>
     )

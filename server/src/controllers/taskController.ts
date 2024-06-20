@@ -10,7 +10,10 @@ const getAllTasks = async (req: Request, res: Response) => {
         const allTasks = await prisma.tasks.findMany({
             where: {
                 userId: id
-            }
+            },
+            include: {
+                subTasks: true
+            },
         })
 
         if (allTasks.length === 0) {
@@ -24,9 +27,9 @@ const getAllTasks = async (req: Request, res: Response) => {
     }
 }
 
+
 const getSingleTask = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
-
 
     try {
         const singleTask = await prisma.tasks.findMany({
@@ -45,19 +48,20 @@ const getSingleTask = async (req: Request, res: Response) => {
 }
 
 const createTask = async (req: Request, res: Response) => {
-    const { title, content, difficulty } = req.body
+    const { title, subTasks } = req.body
     const id = req.user.id
 
     try {
         const task = await prisma.tasks.create({
             data: {
                 title: title,
-                content: content,
                 userId: id,
-                difficulty: difficulty
-            }
-        })
-
+                subTasks: {
+                    create: subTasks
+                },
+            },
+            include: { subTasks: true },
+        });
         res.status(201).json(task)
 
     } catch (error) {
@@ -66,55 +70,29 @@ const createTask = async (req: Request, res: Response) => {
     }
 }
 
-const calculateXp = (difficulty: string) => {
-    switch (difficulty) {
-        case 'easy':
-            return 10
-        case 'medium':
-            return 20
-        case 'hard':
-            return 30
-        default:
-            return 0
-    }
-};
 
-const deleteTask = async (req: Request, res: Response) => {
+
+const completeSubTask = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
-    const userId = req.user.id
+    const { completed } = req.body
 
     try {
-        const task = await prisma.tasks.findUnique({ where: { id: id } })
+        const subTask = await prisma.subTask.update({
+            where: { id: id },
 
-        if (!task) {
-            return res.status(404).json({ message: 'No task found' })
-        }
+            data: {
+                completed: completed,
+            },
+        })
 
-        const xpEarned = calculateXp(task.difficulty);
-
-        const user = await prisma.users.findUnique({ where: { id: userId } })
-
-        if (!user) {
-            return res.status(404).json({ message: 'No user found' })
-        }
-
-        await prisma.$transaction([
-            prisma.tasks.delete({ where: { id: id } }),
-            prisma.users.update({
-                where: { id: userId },
-                data: {
-                    experience_points: Math.max(0, user.experience_points - xpEarned)
-                }
-            })
-        ]);
-
-        res.status(200).json( xpEarned )
-
+        res.status(201).json(subTask)
     } catch (error) {
-        console.error('Something went wrong deleting tasks', error)
-        res.status(500).json({ message: 'Something went wrong' })
+        console.log(`Something went wrong creating tasks`, error)
+        res.status(500).json({ message: `Something went wrong` })
     }
-};
+}
+
+
 
 const completeTask = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
@@ -127,26 +105,51 @@ const completeTask = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'No task found' })
         }
 
-        const xpEarned = calculateXp(task.difficulty)
 
-        const user = await prisma.users.findUnique({ where: { id: userId } })
+       
+
+        const subTask = await prisma.subTask.findMany({
+            where: {
+                taskId: id
+            }
+        })
+
+        const addCurrency = subTask.length
+
+        const currenyEarned = 1 + addCurrency
+
+        if (subTask.length > 0) {
+            const subTaskComplete = await prisma.subTask.findMany({
+                where: {
+                    completed: true
+                }
+            })
+
+            if (subTaskComplete.length === 0) {
+                return res.status(400).json({ message: 'Must Complete all subtasks first!' })
+            }
+        }
+
+        const user = await prisma.users.findUnique({
+            where: { id: userId }
+        })
 
         if (!user) {
             return res.status(404).json({ message: 'No user found' })
         }
 
         const completedTask = await prisma.tasks.deleteMany({
-            where: { id: id }, 
+            where: { id: id },
         });
 
         await prisma.users.update({
             where: { id: userId },
             data: {
-                experience_points: user.experience_points + xpEarned
+                currency: user.currency + currenyEarned
             }
         });
 
-        res.status(200).json( xpEarned )
+        res.status(200).json(currenyEarned)
 
     } catch (error) {
         console.error('Something went wrong completing tasks', error)
@@ -155,4 +158,4 @@ const completeTask = async (req: Request, res: Response) => {
 };
 
 
-export { getAllTasks, getSingleTask, createTask, deleteTask ,completeTask }
+export { getAllTasks, getSingleTask, createTask, completeTask, completeSubTask }

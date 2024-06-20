@@ -1,4 +1,4 @@
-import {PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { taskData } from '../models/Types';
 
 
@@ -20,17 +20,12 @@ export const taskSlice = createSlice({
     newTask: (state, action) => {
       state.tasks.push(action.payload);
     },
-    failTask:(state, action:PayloadAction<number>) => {
-      state.tasks = state.tasks.filter(task => task.id !== action.payload);
-    },
     completeTask:(state, action) => {
       state.tasks = state.tasks.filter(task => task.id !== action.payload);
     },
-  
-  },
-  
+  }, 
 });
 
 
-export const { setTasks, newTask ,completeTask,failTask } = taskSlice.actions
+export const { setTasks, newTask ,completeTask} = taskSlice.actions
 export default taskSlice.reducer;

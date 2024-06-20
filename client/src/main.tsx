@@ -9,7 +9,7 @@ import AuthRedirect from './layouts/AuthRedirect'
 import ProtectedRoute from './layouts/ProtectedRoute'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
-
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
 
@@ -38,4 +38,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <RouterProvider router={router}></RouterProvider>
       </Provider>
   </React.StrictMode>,
+  
 )

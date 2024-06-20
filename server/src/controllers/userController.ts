@@ -24,7 +24,7 @@ const getUser = async (req: Request, res: Response) => {
             id: user.id,
             email: user.email,
             user_name: user.user_name,
-            experience_points: user.experience_points
+            currency: user.currency,
         })
 
     } catch (error) {
@@ -85,7 +85,7 @@ const registerUser = async (req: Request, res: Response) => {
             id: user.id,
             email: user.email,
             user_name: user.user_name,
-            experience_points: user.experience_points
+            currency: user.currency,
         })
     } catch (error) {
         console.log('Something went wrong registering user', error)
@@ -125,7 +125,7 @@ const loginUser = async (req: Request, res: Response) => {
             id: user.id,
             email: user.email,
             user_name: user.user_name,
-            experience_points: user.experience_points
+            currency: user.currency,
         })
 
     } catch (error) {
