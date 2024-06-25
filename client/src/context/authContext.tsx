@@ -6,6 +6,7 @@ import { fetchUser, loginUser, logoutUser, registerUser } from "../api/authApi";
 
 type AuthContext = {
     user: userData,
+    isLoading:boolean,
     logout: () => void,
     login: (data:userData) => void,
     register: (data:userData) => void
@@ -17,7 +18,7 @@ export const AuthContext = React.createContext<AuthContext | undefined>(undefine
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     const queryClient = useQueryClient()
 
-    const { data: user } = useQuery({
+    const { data: user , isLoading } = useQuery({
         queryKey: ['auth'],
         queryFn: fetchUser,
         retry: false
@@ -58,7 +59,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     console.log(user)
 
     return (
-        <AuthContext.Provider value={{ user, logout ,login, register }}>
+        <AuthContext.Provider value={{ user, logout ,login, register ,isLoading}}>
             {children}
         </AuthContext.Provider>
     )

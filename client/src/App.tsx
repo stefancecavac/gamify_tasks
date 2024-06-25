@@ -2,10 +2,14 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import { UseAuthContext } from "./context/authContext"; // Adjust context import based on how it's exported
+import { UseAuthContext } from "./context/authContext";
 
 const App = () => {
-    const { user } = UseAuthContext(); // Assuming useAuthContext returns user state
+    const { user ,isLoading  } = UseAuthContext()
+
+    if (isLoading) {
+        return null;
+    }
 
     return (
         <BrowserRouter>
