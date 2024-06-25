@@ -1,9 +1,9 @@
 import { taskData } from "../models/Types";
 import { formatDistanceToNow } from "date-fns";
-import useCompleteTask from "../api/completeTask";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingComponent from "./LoadingComponent";
-import useCompleteSubTask from "../api/completeSubTask";
+import { useCompleteSubTask, useCompleteTask } from "../api/tasksApi";
+
 
 
 
@@ -21,17 +21,16 @@ const outlineVariants = {
 };
 
 const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
-    const { complete, loading: completeLoading, error } = useCompleteTask()
-    const { completeSubTask } = useCompleteSubTask()
-    
- 
+    const {mutate:completeTask , isPending} = useCompleteTask()
+    const { mutate:completeSubTask} = useCompleteSubTask()
 
-    const handleComplete = async (id: number) => {
-        await complete(id);
+
+    const handleComplete = (id: number) => {
+        completeTask(id);
     };
 
-    const handleSubTask = async (id: number | undefined, completed: boolean) => {
-        completeSubTask(id, completed)
+    const handleSubTask = async (id: number , completed: boolean) => {
+        completeSubTask({id, completed})
     };
 
 
@@ -41,7 +40,7 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                 <motion.div whileHover={{ scale: 1.1 }}
                     className={`rounded-xl  flex shadow-md overflow-hidden bg-white`}>
                     <div className={` bg-blue-300  p-2 flex items-center`}>
-                        {completeLoading ?
+                        {isPending ?
                             <LoadingComponent></LoadingComponent>
                             :
                             <>
@@ -77,14 +76,13 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                         {task.subTasks?.map((subTask) => (
                             <div key={subTask.id} className="flex items-center gap-2">
                                 <input type="checkbox"
-                                    onChange={() => handleSubTask(subTask.id, !subTask.completed)}
+                                    onChange={() => handleSubTask(subTask.id!, !subTask.completed)}
                                     defaultChecked={subTask.completed}
                                     className="peer relative appearance-none  size-5 border rounded-xl border-blue-300  cursor-pointer    checked:bg-blue-300"></input>
                                 <p>{subTask.title}</p>
                                 {subTask.completed && <p>+1</p>}
                             </div>
                         ))}
-                        {error && <div>{error}</div>}
                         <p className="text-xs text-text-primary text-center mt-5">{formatDistanceToNow(new Date(task.createdAt))} ago</p>
                     </div>
 

@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { userData, userSchema } from "../models/Types";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../redux/authSlice";
-import { AppDispatch, RootState } from "../redux/store";
 import { AnimatePresence, motion } from "framer-motion";
+import { UseAuthContext } from "../context/authContext";
 
 interface LoginModalProps {
     loginModal: boolean;
@@ -12,12 +10,11 @@ interface LoginModalProps {
 }
 const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<userData>({ resolver: zodResolver(userSchema) })
-    const dispatch = useDispatch<AppDispatch>()
-    const error = useSelector((state: RootState) => state.auth.error)
+    const {login} = UseAuthContext()
+
 
     const onSubmit = (data: userData) => {
-        console.log('clicked')
-        dispatch(loginUser(data))
+        login(data)
     }
 
     return (
@@ -46,7 +43,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) =>
                                 <input {...register('email')} className="mt-2 p-2 rounded-2xl text-gray-500 bg-gray-200" placeholder="Ex. hero@gmail.com">
                                 </input>
                                 {errors.email?.message && <span className="text-red-500 text-sm font-normal">{errors.email?.message}</span>}
-                                {error && <div className="text-red-500 text-sm mb-5">{error}</div>}
 
                             </label>
 
@@ -54,7 +50,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) =>
                                 <input {...register('password')} className="mt-2 p-2 rounded-2xl text-gray-500 bg-gray-200" >
                                 </input>
                                 {errors.password?.message && <span className="text-red-500 text-sm font-normal">{errors.password?.message}</span>}
-                                {error && <div className="text-red-500 text-sm  mb-5">{error}</div>}
                             </label>
 
                             <button type="submit" className="bg-primary rounded-2xl p-2 text-xl text-text-primary mt-5 transition-colors hover:bg-gradient-to-l ">Login</button>

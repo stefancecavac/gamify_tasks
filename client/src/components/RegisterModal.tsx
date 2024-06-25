@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { userData, userSchema } from "../models/Types";
-import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../redux/authSlice";
-import { AppDispatch, RootState } from "../redux/store";
 import { AnimatePresence, motion } from "framer-motion";
+import { UseAuthContext } from "../context/authContext";
+
 
 interface RegisterModalProps {
     registerModal: boolean;
@@ -13,11 +12,10 @@ interface RegisterModalProps {
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ registerModal, setRegisterModal }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<userData>({ resolver: zodResolver(userSchema) })
-    const dispatch = useDispatch<AppDispatch>()
-    const error = useSelector((state: RootState) => state.auth.error)
+    const {register:registerUser} = UseAuthContext()
 
     const onSubmit = (data: userData) => {
-        dispatch(registerUser(data))
+        registerUser(data)
     }
 
 
@@ -61,7 +59,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ registerModal, setRegiste
                     </label>
 
                     <button type="submit" className="bg-primary rounded-2xl p-2 text-xl text-text-primary mt-5 transition-colors hover:bg-gradient-to-l ">Register</button>
-                    {error && <div>{error}</div>}
+                    
             </motion.form>
         </>}
         </AnimatePresence>

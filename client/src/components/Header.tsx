@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux"
 import LogoutButton from "./LogoutButton"
-import { RootState } from "../redux/store"
 import CurrencyBar from './CurrencyBar'
+import { UseAuthContext } from "../context/authContext"
 
 const Header = () => {
-    const user = useSelector((state: RootState) => state.auth.user)
+    const {user} = UseAuthContext()
 
 
     return (

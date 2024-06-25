@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { taskData, taskSchema } from "../models/Types";
-import useCreateTask from "../api/createTask";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCreateTask } from "../api/tasksApi";
 
 interface TaskModalProps {
     newTaskModal: boolean;
@@ -13,17 +13,12 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
     const { register, handleSubmit, formState: { errors }, control } = useForm<taskData>({ resolver: zodResolver(taskSchema) });
     const { fields, append, remove } = useFieldArray({ control, name: "subTasks" })
 
-    const { createTask, error, loading } = useCreateTask();
+    const {mutate , isPending} = useCreateTask()
 
 
     const handleCreate = async (data: taskData) => {
-        try {
-            data.subTasks = data.subTasks?.filter(subTask => subTask.title?.trim() !== "")
-            console.log(data)
-            await createTask(data);
-        } catch (error) {
-            console.error('Error creating task:', error);
-        }
+        data.subTasks = data.subTasks?.filter(subTask => subTask.title?.trim() !== "")
+        mutate(data);
     };
 
 
@@ -68,7 +63,18 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
                         <div className="px-10 mt-10 ">
                             <div className="flex justify-between items-center">
                                 <label className="flex w-full font-bold  text-text-primary ">Subtasks:</label>
-                                <button className="bg-gray-300 rounded-2xl p-2  text-white mt-5 m-5 " type="button" onClick={() => append({ title: '', completed: false })}>Add Subtask</button>
+                                <motion.button
+                                    whileHover={{ scale: 1.2 }}
+                                    className="bg-primary rounded-2xl p-1  text-white  " type="button" onClick={() => append({ title: '', completed: false })}>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="size-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </motion.button>
                             </div>
 
                             {fields.map((subTask, index) => (
@@ -100,10 +106,9 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
                                 whileHover={{ scale: 1.1 }}
                                 animate={errors.title ? { x: [0, -10, 10, -10, 10, 0] } : {}}
                                 transition={{ duration: 0.2 }}
-                                disabled={loading} type="submit"
-                                className="bg-primary rounded-2xl p-2 text-xl text-white mt-5 m-5 ">{loading ? 'Creating ...' : 'Create task'}</motion.button>
+                                disabled={isPending} type="submit"
+                                className="bg-primary rounded-2xl p-2 text-xl text-white mt-5 m-5 ">{isPending ? 'Creating ...' : 'Create task'}</motion.button>
                         </div>
-                        {error && <div>{error}</div>}
                     </motion.form>
                 </>}
         </AnimatePresence>
