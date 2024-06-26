@@ -12,7 +12,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) =>
     const { register, handleSubmit, formState: { errors } } = useForm<userData>({ resolver: zodResolver(userSchema) })
     const {login} = UseAuthContext()
 
-
     const onSubmit = (data: userData) => {
         login(data)
     }
@@ -31,7 +30,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ loginModal, setLoginModal }) =>
                     <motion.form initial={{ scale: 0.5, opacity: 0 }} onSubmit={handleSubmit(onSubmit)}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.5, opacity: 0 }}
-                        className={`fixed h-fit justify-center top-20 m-auto right-0 left-0  w-3/12 z-50 flex flex-col items-center bg-white p-2 rounded-3xl`}>
+                        className='fixed h-fit justify-center top-20 m-auto w-4/5 right-0 left-0 sm:w-6/12 lg:w-3/12  z-50 flex flex-col items-center bg-white p-2 rounded-3xl'>
                             <div className="flex">
                                 <h2 className="text-5xl mb-10 p-2 font-bold text-primary">Login</h2>
                                 <svg onClick={() => setLoginModal(false)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="hover:cursor-pointer absolute size-8 right-5 text-primary">

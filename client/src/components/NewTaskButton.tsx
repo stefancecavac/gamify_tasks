@@ -11,8 +11,8 @@ const NewTaskButton = () => {
             <motion.button 
                 whileHover={{ scale: 1.2}}
                 onClick={() => setNewTaskModal(prev => !prev)}
-                className="rounded-full p-1 bg-blue-300 text-text-primary font-semibold px-2 py-1 ">
-                New Task
+                className="rounded-full p-1 text-sm  bg-blue-300 text-text-primary font-semibold px-2 py-1 ">
+                Add Task
             </motion.button>
             <NewTaskModal newTaskModal={newTaskModal} setNewTaskModal={setNewTaskModal}></NewTaskModal>
         </>

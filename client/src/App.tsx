@@ -14,7 +14,7 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-
+                                                    
                 <Route path="/" element={user ? <Layout><Home /></Layout> : <Navigate to="/signup" />} />
 
 

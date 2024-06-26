@@ -105,9 +105,6 @@ const completeTask = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'No task found' })
         }
 
-
-       
-
         const subTask = await prisma.subTask.findMany({
             where: {
                 taskId: id

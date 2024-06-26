@@ -1,9 +1,10 @@
 import { userData } from "../models/Types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 
 export const fetchUser = async () => {
-    const response = await fetch(`http://localhost:3000/api/users/`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
     });
@@ -19,7 +20,7 @@ export const fetchUser = async () => {
 
 
 export const loginUser = async (data: userData) => {
-    const response = await fetch(`http://localhost:3000/api/users/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -37,7 +38,7 @@ export const loginUser = async (data: userData) => {
 
 
 export const registerUser = async (data: userData) => {
-    const response = await fetch(`http://localhost:3000/api/users/register`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -55,7 +56,7 @@ export const registerUser = async (data: userData) => {
 
 
 export const logoutUser = async () => {
-    const response = await fetch(`http://localhost:3000/api/users/logout`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/logout`, {
         method: 'POST',
         credentials: 'include',
     });
