@@ -18,7 +18,7 @@ const outlineVariants = {
 };
 
 const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
-    const { mutate: completeTask, isPending } = useCompleteTask()
+    const { mutate: completeTask, isPending  } = useCompleteTask()
     const { mutate: completeSubTask } = useCompleteSubTask()
 
 
@@ -37,10 +37,9 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                 <motion.div whileHover={{ scale: 1.1 }}
                     className={`rounded-md border-l-4 border-blue-300  flex shadow-md overflow-hidden bg-white`}>
 
-
                     <div className="p-2 flex-1 flex-col overflow-hidden">
                         <div className="flex justify-between items-center">
-                            <p className="font-bold text-xl text-blue-300">{task?.title}</p>
+                            <p className="font-bold text-blue-300">{task?.title}</p>
                         </div>
 
                         <div className="mt-3">
@@ -63,7 +62,7 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                         </div>
                     </div>
 
-                    <div className={`  p-2 flex items-center`}>
+                    <div className={`p-2 flex items-center`}>
                         {isPending ?
                             <LoadingComponent></LoadingComponent>
                             :
@@ -79,7 +78,7 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                                     viewBox="0 0 24 24"
                                     strokeWidth={1.5}
                                     stroke="currentColor"
-                                    className="size-7 text-neutral-400 absolute hover:cursor-pointer"
+                                    className="size-7 text-blue-300 absolute hover:cursor-pointer"
                                 >
                                     <motion.path
                                         variants={outlineVariants}
@@ -91,7 +90,6 @@ const TaskCard: React.FC<{ task: taskData }> = ({ task }) => {
                             </>
                         }
                     </div>
-
                 </motion.div>
             </AnimatePresence>
 

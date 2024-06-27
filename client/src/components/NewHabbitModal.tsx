@@ -3,6 +3,7 @@ import {  useForm } from "react-hook-form";
 import { habbitData, habbitSchema} from "../models/Types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCreateHabbit } from "../api/habbitApi";
+import { useState } from "react";
 
 interface HabitModalProps {
     newHabbitModal: boolean;
@@ -10,12 +11,18 @@ interface HabitModalProps {
 }
 
 const NewHabbitModal: React.FC<HabitModalProps> = ({ newHabbitModal, setNewHabbitModal }) => {
-    const { register, handleSubmit, formState: { errors }} = useForm<habbitData>({ resolver: zodResolver(habbitSchema) });
+    const { register, handleSubmit, formState: { errors } , reset} = useForm<habbitData>({ resolver: zodResolver(habbitSchema) });
+    const [success , setSuccess] = useState(false)
 
     const {isPending , mutate} = useCreateHabbit()
 
     const handleCreate = async (data: habbitData) => {
         mutate(data)
+        reset()
+        setSuccess(true); 
+        setTimeout(() => {
+            setSuccess(false)
+        }, 5000);
     };
 
 
@@ -66,6 +73,8 @@ const NewHabbitModal: React.FC<HabitModalProps> = ({ newHabbitModal, setNewHabbi
                                 disabled={isPending} type="submit"
                                 className="bg-primary rounded-2xl p-2 text-xl text-white mt-5 m-5 ">{isPending ? 'Creating ...' : 'Create task'}</motion.button>
                         </div>
+                        {success && <div className="bg-green-200 m-5 p-2 text-green-500 rounded-lg border-2 border-green-500">Habbit added</div>}
+
                     </motion.form>
                 </>}
         </AnimatePresence>

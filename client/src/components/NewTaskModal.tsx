@@ -3,6 +3,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { taskData, taskSchema } from "../models/Types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCreateTask } from "../api/tasksApi";
+import { useState } from "react";
 
 interface TaskModalProps {
     newTaskModal: boolean;
@@ -10,15 +11,23 @@ interface TaskModalProps {
 }
 
 const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal }) => {
-    const { register, handleSubmit, formState: { errors }, control } = useForm<taskData>({ resolver: zodResolver(taskSchema) });
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<taskData>({ resolver: zodResolver(taskSchema) });
     const { fields, append, remove } = useFieldArray({ control, name: "subTasks" })
+    const [success , setSuccess] = useState(false)
+    
 
-    const {mutate , isPending} = useCreateTask()
+    const { mutate, isPending } = useCreateTask()
 
 
     const handleCreate = async (data: taskData) => {
         data.subTasks = data.subTasks?.filter(subTask => subTask.title?.trim() !== "")
         mutate(data);
+        reset()
+        remove()
+        setSuccess(true); 
+            setTimeout(() => {
+                setSuccess(false)
+            }, 3000);
     };
 
 
@@ -109,6 +118,7 @@ const NewTaskModal: React.FC<TaskModalProps> = ({ newTaskModal, setNewTaskModal 
                                 disabled={isPending} type="submit"
                                 className="bg-primary rounded-2xl p-2 text-xl text-white mt-5 m-5 ">{isPending ? 'Creating ...' : 'Create task'}</motion.button>
                         </div>
+                        {success && <div className="bg-green-200 m-5 p-2 text-green-500 rounded-lg border-2 border-green-500">Task added</div>}
                     </motion.form>
                 </>}
         </AnimatePresence>

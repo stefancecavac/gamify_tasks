@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { taskData } from "../models/Types";
+import { UseToastContext } from "../context/toastContext";
 
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const useCompleteTask = () => {
+    const { showToast} = UseToastContext()
     const queryClient = useQueryClient();
 
     const completeTask = async (id: number) => {
@@ -21,10 +23,11 @@ export const useCompleteTask = () => {
         return json;
     };
 
-    const { mutate, isPending } = useMutation({
+    const { mutate, isPending  } = useMutation({
         mutationKey: ['tasks'],
         mutationFn: completeTask,
-        onSuccess: () => {
+        onSuccess: (data) => {
+            showToast({reward:data})
             queryClient.invalidateQueries({queryKey:['tasks']})
             queryClient.invalidateQueries({queryKey:['auth']})
         },
@@ -109,7 +112,7 @@ export const useCreateTask = () => {
 
     };
 
-    const { mutate, isPending } = useMutation({
+    const { mutate, isPending  } = useMutation({
         mutationKey: ['tasks'],
         mutationFn: createTask,
         onSuccess: () => {

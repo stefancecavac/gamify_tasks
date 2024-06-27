@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { habbitData } from "../models/Types";
+import { UseToastContext } from "../context/toastContext";
 
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const useCompleteHabbit = () => {
+    const {showToast} = UseToastContext()
     const queryClient = useQueryClient();
 
     const completeHabbit = async ({ id, status  }: { id: number, status: boolean  }) => {
@@ -25,7 +27,8 @@ export const useCompleteHabbit = () => {
     const { mutate, isPending } = useMutation({
         mutationKey: ['habbits'],
         mutationFn: completeHabbit,
-        onSuccess: () => {
+        onSuccess: (data) => {
+            showToast({reward:data})
             queryClient.invalidateQueries({queryKey:['habbits']})
             queryClient.invalidateQueries({queryKey:['auth']})
         },

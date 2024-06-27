@@ -54,10 +54,11 @@ const completeHabbit = async (req: Request, res: Response) => {
                 streak: {increment: 1}
             }
         })
+        let currencyEarned = 0
 
         //updating only on complted 
         if (habbits.status === true) {
-            const currenyEarned = 2
+            currencyEarned = 2
 
             const user = await prisma.users.findUnique({
                 where: { id: userId }
@@ -71,12 +72,13 @@ const completeHabbit = async (req: Request, res: Response) => {
             await prisma.users.update({
                 where: { id: userId },
                 data: {
-                    currency: user.currency + currenyEarned
+                    currency: user.currency + currencyEarned
                 }
             });
+
         }
 
-        res.status(200).json(habbits)
+        res.status(200).json(currencyEarned)
     } catch (error) {
         console.log(`Something went wrong completing habbits`, error)
         res.status(500).json({ message: `Something went wrong` })
